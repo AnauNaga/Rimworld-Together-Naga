@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
 using Shared;
 using Verse;
+using Verse.Profile;
 
 namespace GameClient
 {
@@ -26,7 +28,7 @@ namespace GameClient
         public static void SetValuesFromGame(string seedString, float planetCoverage, OverallRainfall rainfall, OverallTemperature temperature, OverallPopulation population, List<FactionDef> factions, float pollution)
         {
             WorldGeneratorManager.seedString = seedString;
-            WorldGeneratorManager.persistentRandomValue = 0;
+            WorldGeneratorManager.persistentRandomValue = GenText.StableStringHash(seedString);
             WorldGeneratorManager.planetCoverage = planetCoverage;
             WorldGeneratorManager.rainfall = rainfall;
             WorldGeneratorManager.temperature = temperature;
@@ -59,24 +61,25 @@ namespace GameClient
             cachedWorldDetails = worldDetailsJSON;
         }
 
-        public static void GeneratePatchedWorld(bool firstGeneration)
+        public static void GeneratePatchedWorld()
         {
             LongEventHandler.QueueLongEvent(delegate
             {
                 Find.GameInitData.ResetWorldRelatedMapInitData();
                 Current.Game.World = GenerateWorld();
-                LongEventHandler.ExecuteWhenFinished(delegate
+                LongEventHandler.ExecuteWhenFinished(delegate 
                 {
+                    Find.World.renderer.RegenerateAllLayersNow();
+                    MemoryUtility.UnloadUnusedUnityAssets();
+                    Current.CreatingWorld = null;
                     PostWorldGeneration();
-
-                    if (!firstGeneration) ClientValues.ToggleRequireSaveManipulation(true);
                 });
             }, "GeneratingWorld", doAsynchronously: true, null);
         }
 
         private static World GenerateWorld()
         {
-            Rand.PushState(0);
+            Rand.PushState(persistentRandomValue);
             Current.CreatingWorld = new World();
             Current.CreatingWorld.info.seedString = seedString;
             Current.CreatingWorld.info.persistentRandomValue = persistentRandomValue;
@@ -93,7 +96,7 @@ namespace GameClient
             {
                 worldGenSteps[i].worldGenStep.GenerateFresh(seedString);
             }
-        
+
             Current.CreatingWorld.grid.StandardizeTileData();
             Current.CreatingWorld.FinalizeInit();
             Find.Scenario.PostWorldGenerate();
@@ -120,16 +123,8 @@ namespace GameClient
                 worldDetailsJSON.factions.Add(faction.defName);
             }
 
-            worldDetailsJSON = XmlParser.GetWorldXmlData(worldDetailsJSON);
-
             Packet packet = Packet.CreatePacketFromJSON(nameof(PacketHandler.WorldPacket), worldDetailsJSON);
             Network.listener.EnqueuePacket(packet);
-        }
-
-        public static void GetWorldFromServer()
-        {
-            XmlParser.ModifyWorldXml(cachedWorldDetails);
-            GameDataSaveLoader.LoadGame(SaveManager.customSaveName);
         }
 
         public static void PostWorldGeneration()
