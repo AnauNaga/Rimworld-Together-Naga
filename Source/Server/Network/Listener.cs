@@ -97,7 +97,6 @@ namespace GameServer
         }
 
         //Runs in a separate thread and checks if the connection should still be up
-
         public void CheckConnectionHealth()
         {
             try
@@ -114,6 +113,45 @@ namespace GameServer
             Thread.Sleep(1000);
 
             Network.KickClient(targetClient);
+        }
+        
+        public class coroutine
+        {
+            string coroutineName;
+            Action action;
+            int timeBetweenUpdates;
+            int timeOfLastUpdate;
+            public coroutine(string coroutineName,Action action, float timeBetweenUpdates, float timeSinceLastUpdate)
+            {
+
+            }
+        }
+
+        public List<coroutine> clientCoroutineList = new List<coroutine>;
+
+        public void InitializeDefaultCoroutines()
+        {
+           
+            clientCoroutineList.Add(new coroutine("CheckConnectionHealth",CheckConnectionHealth,1,0));
+            clientCoroutineList.Add(new coroutine("CheckKAFlag", CheckKAFlag, int.Parse(Master.serverConfig.MaxTimeoutInMS), 0));
+            clientCoroutineList.Add(new coroutine("AutoSave", AutoSave, int.Parse(Master.serverConfig.autoSaveIntervalInMinutes,0)))
+        }
+
+        public void ClientCoroutineDispatcher()
+        {
+            try
+            {
+                while (true) {
+                    foreach(coroutine coroutine in clientCoroutineList)
+                    {
+                        if(coroutine.action.invoke())
+                    }
+                }
+            }
+            catch { }
+
+
+
         }
 
         //Runs in a separate thread and checks if the connection is still alive
@@ -136,6 +174,9 @@ namespace GameServer
 
             disconnectFlag = true;
         }
+
+        
+
 
         //Forcefully ends the connection with the client and any important process associated with it
 

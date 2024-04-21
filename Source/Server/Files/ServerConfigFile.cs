@@ -14,5 +14,9 @@
         public bool VerboseLogs = false;
 
         public bool DisplayChatInConsole = false;
+
+        public bool autoSavingIsServerControlled = false;
+
+        public float autoSaveIntervalInDays = 3.0f;
     }
 }
