@@ -929,6 +929,8 @@ namespace GameClient
 
             GetItemName(toUse, itemData);
 
+            GetItemArt(toUse, itemData);
+
             GetItemMaterial(toUse, itemData);
 
             GetItemQuantity(toUse, itemData, thingCount);
@@ -969,6 +971,27 @@ namespace GameClient
         {
             try { itemData.defName = thing.def.defName; }
             catch { Log.Warning($"Failed to get name of thing {thing.def.defName}"); }
+        }
+
+        private static void GetItemArt(Thing thing, ItemData itemData)
+        {
+
+            try
+            {
+                CompArt compArt = thing.TryGetComp<CompArt>();
+                if (compArt == null) return;
+                itemData.hasArt = compArt.Active;
+
+                itemData.authorName = compArt.AuthorName;
+                itemData.title = compArt.Title;
+                itemData.taleDefName = compArt.TaleRef.ToString();
+
+
+                Log.Message($"Author: {itemData.authorName}  Title: {itemData.title}  Info: {compArt.TaleRef.ToString()}");
+
+            }catch(Exception e) { Log.Warning($"Failed to set art on thing {thing.def.defName}"); }
+
+
         }
 
         private static void GetItemMaterial(Thing thing, ItemData itemData)
