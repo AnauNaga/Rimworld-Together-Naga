@@ -27,8 +27,8 @@ namespace GameClient
         public static Site chosenSite;
         public static CompLaunchable chosendPods;
 
-        public static TransferData outgoingManifest = new TransferData();
-        public static TransferData incomingManifest = new TransferData();
+        public static TradeData outgoingManifest = new TradeData();
+        public static TradeData incomingManifest = new TradeData();
         public static List<Tradeable> listToShowInTradesMenu = new List<Tradeable>();
 
         public static string username;
@@ -91,8 +91,8 @@ namespace GameClient
             chosenCaravan = null;
             chosenSite = null;
 
-            outgoingManifest = new TransferData();
-            incomingManifest = new TransferData();
+            outgoingManifest = new TradeData();
+            incomingManifest = new TradeData();
             listToShowInTradesMenu = new List<Tradeable>();
         }
     }

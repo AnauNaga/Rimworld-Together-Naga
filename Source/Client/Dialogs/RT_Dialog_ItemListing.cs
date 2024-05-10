@@ -4,7 +4,7 @@ using RimWorld;
 using Shared;
 using UnityEngine;
 using Verse;
-
+using static Shared.CommonEnumerators;
 namespace GameClient
 {
     public class RT_Dialog_ItemListing : Window
@@ -147,7 +147,6 @@ namespace GameClient
 
                 else if (transferMode == CommonEnumerators.TransferMode.Rebound)
                 {
-                    ClientValues.incomingManifest.transferStepMode = ((int)CommonEnumerators.TransferStepMode.TradeReAccept).ToString();
 
                     Packet packet = Packet.CreatePacketFromJSON(nameof(PacketHandler.TransferPacket), ClientValues.incomingManifest);
                     Network.listener.EnqueuePacket(packet);

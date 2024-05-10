@@ -14,13 +14,13 @@ namespace GameClient
     {
         //Functions
 
-        public static Pawn[] GetHumansFromString(TransferData transferData)
+        public static Pawn[] GetHumansFromString(TradeData tradeData)
         {
             List<Pawn> humans = new List<Pawn>();
 
-            for (int i = 0; i < transferData.humanDatas.Count(); i++)
+            for (int i = 0; i < tradeData.humanDatas.Count(); i++)
             {
-                HumanData humanData = (HumanData)Serializer.ConvertBytesToObject(transferData.humanDatas[i]);
+                HumanData humanData = (HumanData)Serializer.ConvertBytesToObject(tradeData.humanDatas[i]);
 
                 humans.Add(StringToHuman(humanData));
             }
@@ -658,13 +658,13 @@ namespace GameClient
     {
         //Functions
 
-        public static Pawn[] GetAnimalsFromString(TransferData transferData)
+        public static Pawn[] GetAnimalsFromString(TradeData tradeData)
         {
             List<Pawn> animals = new List<Pawn>();
 
-            for (int i = 0; i < transferData.animalDatas.Count(); i++)
+            for (int i = 0; i < tradeData.animalDatas.Count(); i++)
             {
-                AnimalData animalData = (AnimalData)Serializer.ConvertBytesToObject(transferData.animalDatas[i]);
+                AnimalData animalData = (AnimalData)Serializer.ConvertBytesToObject(tradeData.animalDatas[i]);
 
                 animals.Add(StringToAnimal(animalData));
             }
@@ -921,13 +921,13 @@ namespace GameClient
     {
         //Functions
 
-        public static Thing[] GetItemsFromString(TransferData transferData)
+        public static Thing[] GetItemsFromString(TradeData tradeData)
         {
             List<Thing> things = new List<Thing>();
 
-            for (int i = 0; i < transferData.itemDatas.Count(); i++)
+            for (int i = 0; i < tradeData.itemDatas.Count(); i++)
             {
-                ItemData itemData = (ItemData)Serializer.ConvertBytesToObject(transferData.itemDatas[i]);
+                ItemData itemData = (ItemData)Serializer.ConvertBytesToObject(tradeData.itemDatas[i]);
 
                 Thing thingToAdd = StringToItem(itemData);
                 if (thingToAdd != null) things.Add(thingToAdd);

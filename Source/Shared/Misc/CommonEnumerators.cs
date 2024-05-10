@@ -48,7 +48,7 @@
 
         public enum TransferLocation { Caravan, Settlement, Pod }
 
-        public enum TransferStepMode { TradeRequest, TradeAccept, TradeReject, TradeReRequest, TradeReAccept, TradeReReject, Recover, Pod }
+        public enum TradePacketType { Request, Accept, Reject, Update, Finalize }
 
         //Offline visit
 
