@@ -84,5 +84,10 @@ namespace GameServer
 
             else Logger.WriteToConsole("[Warning] > World is missing. Join server to create it", LogMode.Warning);   
         }
+
+        public static void WorldUpdatePacket()
+        {
+
+        }
     }
 }

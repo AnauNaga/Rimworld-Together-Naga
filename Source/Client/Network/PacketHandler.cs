@@ -86,6 +86,11 @@ namespace GameClient
             WorldManager.ParseWorldPacket(packet);
         }
 
+        public static void WorldUpdatePacket(Packet packet)
+        {
+            WorldManager.UpdateWorld(packet);
+        }
+
         public static void BreakPacket(Packet packet)
         {
             DialogManager.PopWaitDialog();

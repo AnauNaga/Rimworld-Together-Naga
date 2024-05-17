@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using Shared;
+using Verse;
 
 namespace GameClient
 {
@@ -49,6 +50,12 @@ namespace GameClient
                 "Configure your playstyle to your liking", "Some settings might be disabled by the server" });
 
             DialogManager.PushNewDialog(d1);
+        }
+
+        public static void UpdateWorld(Packet packet)
+        {
+            WorldUpdateData worldUpdateData = (WorldUpdateData)Serializer.ConvertBytesToObject(packet.contents);
+            if(ModLister.BiotechInstalled) WorldPollutionUtility.PolluteWorldAtTile(worldUpdateData.tile,worldUpdateData.pollutionAmount);
         }
     }
 }

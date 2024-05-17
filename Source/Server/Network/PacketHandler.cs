@@ -104,6 +104,11 @@ namespace GameServer
             WorldManager.ParseWorldPacket(client, packet);
         }
 
+        public static void WorldUpdatePacket(ServerClient client, Packet packet)
+        {
+            WorldManager.WorldUpdatePacket(client,packet);
+        }
+
         public static void CustomDifficultyPacket(ServerClient client, Packet packet)
         {
             CustomDifficultyManager.ParseDifficultyPacket(client, packet);
