@@ -118,7 +118,11 @@ namespace GameServer
 
         public static void KeepAlivePacket(ServerClient client, Packet packet)
         {
-            //Empty
+            KeepAliveData keepAliveData = (KeepAliveData)Serializer.ConvertBytesToObject(packet.contents);
+
+            //Intentional disconnect should only ever be set to true, never to false.
+            //so it must be set to true if intentionalDisconnect is true, but not false if it is false.
+            if (keepAliveData.intentionalDisconnect) client.intentionalDisconnect = true;
         }
 
         public static void UserUnavailablePacket()

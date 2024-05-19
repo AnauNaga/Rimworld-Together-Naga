@@ -58,6 +58,14 @@ namespace GameClient
     
         public static void SetIntentionalDisconnect(bool mode, DisconnectionManager.DCReason reason = DisconnectionManager.DCReason.None) 
         { 
+            if (mode)
+            {
+                KeepAliveData keepAliveData = new KeepAliveData();
+                keepAliveData.intentionalDisconnect = mode;
+                Packet packet = Packet.CreatePacketFromJSON(nameof(PacketHandler.KeepAlivePacket), keepAliveData);
+                Network.listener.EnqueuePacket(packet);
+            }
+
             DisconnectionManager.isIntentionalDisconnect = mode;
             DisconnectionManager.intentionalDisconnectReason = reason; 
         }

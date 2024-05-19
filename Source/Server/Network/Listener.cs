@@ -88,11 +88,10 @@ namespace GameServer
                     PacketHandler.HandlePacket(targetClient, receivedPacket);
                 }
             }
-
             catch (Exception e)
             {
-                if (Master.serverConfig.VerboseLogs) Logger.WriteToConsole(e.ToString(), LogMode.Warning);
-
+                //Network.KickClient() takes care of the disconnect message
+                if (Master.serverConfig.VerboseLogs && !targetClient.intentionalDisconnect) Logger.WriteToConsole(e.ToString(), LogMode.Warning);
                 disconnectFlag = true;
             }
         }
